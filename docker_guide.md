@@ -1,12 +1,20 @@
 # Docker环境使用指南与项目运行步骤
 
-## 一、Docker环境基础知识
+## 一、Docker启动
 
-### 已完成的配置
-- 已创建基于Python 3.12-slim的Dockerfile
-- 已设置docker-compose.yml配置文件
-- 已成功构建Docker镜像并进入交互式容器
-- 项目依赖已在镜像构建过程中自动安装完成
+项目使用Docker进行容器化部署，确保环境一致性。执行以下命令构建Docker镜像：
+
+```bash
+# 在项目根目录执行
+cd /root/workspace/perp-dex-tools
+docker build -t perp-dex-tools .
+```
+构建过程会自动执行以下操作：
+- 基于Python 3.12-slim创建容器
+- 安装必要的系统依赖（build-essential、git等）
+- 安装项目的Python依赖包（从requirements.txt、apex_requirements.txt和para_requirements.txt）
+- 复制项目文件到容器内/app目录
+- 设置必要的环境变量
 
 ## 二、进入Docker环境的步骤
 
@@ -17,7 +25,7 @@
 docker start perp-dex-container
 docker exec -it perp-dex-container bash
 
-# 方法二：创建新的交互式容器
+# 方法二：创建新的交互式容器，docker build后如果未创建容器，那么运行这个
 docker run -it --name perp-dex-container -v $(pwd):/app perp-dex-tools bash
 ```
 
