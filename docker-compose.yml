@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  perp-dex-bot:
+    build: .
+    container_name: perp-dex-bot
+    volumes:
+      - .:/app  # 挂载本地代码，便于开发调试
+      - ./.env:/app/.env  # 直接挂载.env文件
+      - logs:/app/logs  # 挂载日志目录
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  logs:
+    # 使用命名卷存储日志，确保日志持久化
