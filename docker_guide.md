@@ -51,15 +51,41 @@ ls -la
 
 ### 3. 运行项目
 
+首先需要配置环境变量，复制粘贴.env.docker.template或者重命名，生成.env环境变量文件
+之后在里面配置对应交易所api的密钥等信息即可
+
 根据项目结构，您可以通过以下方式运行程序：
 
 ```bash
-# 运行主程序
-python3 trading_bot.py
-
-# 或使用runbot.py
-python3 runbot.py
+# 运行 ETH 对冲模式（Extended）
+python hedge_mode.py --exchange extended --ticker ETH --size 0.1 --iter 20
 ```
+更多运行方式请参考README
+
+注意事项：
+- 因python库的问题，需要在“/usr/local/lib/python3.12/site-packages/x10/perpetual/configuration.py”末尾添加
+``` python
+STARKNET_MAINNET_CONFIG = EndpointConfig(
+    chain_rpc_url="",
+    api_base_url="https://api.starknet.extended.exchange/api/v1",
+    stream_url="wss://api.starknet.extended.exchange/stream.extended.exchange/v1",
+    onboarding_url="https://api.starknet.extended.exchange",
+    signing_domain="extended.exchange",
+    collateral_asset_contract="",
+    asset_operations_contract="",
+    collateral_asset_on_chain_id="0x1",
+    collateral_decimals=6,
+    collateral_asset_id="0x1",
+    starknet_domain=StarknetDomain(name="Perpetuals", version="v0", chain_id="SN_MAIN", revision="1"),
+)
+``` 
+代码，否则会报错，具体configuration.py的位置需要看你安装的python库的位置，这里只做个例子
+- 因python库的问题，需要在
+- 确保配置了正确的交易所API密钥和其他必要参数
+- 首次运行时，建议使用`--iter 10`等参数进行测试，避免对交易所产生过大压力
+- 容器内运行时，所有输出都将显示在终端，建议在后台运行（添加`-d`参数）
+
+
 
 ## 三、Docker常用命令与最佳实践
 
